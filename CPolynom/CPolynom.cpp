@@ -36,16 +36,18 @@ void CPolynom::Coef(int exp, double coef)
 	else if (exp >= 0)
 		polinom[exp] = coef;
 	else
-		throw exception("Nevazeci red");
+		throw exception("Nevazeci exp");
 }
 
 void CPolynom::Add(CPolynom* poly1, CPolynom* poly2)
 {
-	delete[] this->polinom;
+	delete[] this->polinom; //novo polje bice duze
 	if (poly1->red < poly2->red)
 	{
 		this->red = poly2->red;
-		this->polinom = new double(poly2->red + 1);
+		this->polinom = new double[poly2->red + 1];
+		for (int i = 0; i <= poly2->red; i++)
+			this->polinom[i] = 0;
 		for (int i = 0; i <= poly1->red; i++)
 			this->polinom[i] = poly1->polinom[i] + poly2->polinom[i];
 		for (int i = poly1->red + 1; i <= poly2->red; i++)
@@ -55,7 +57,9 @@ void CPolynom::Add(CPolynom* poly1, CPolynom* poly2)
 	{
 		
 		this->red = poly1->red;
-		this->polinom = new double(poly2->red + 1);
+		this->polinom = new double[poly2->red + 1];
+		for (int i = 0; i <= poly1->red; i++)
+			this->polinom[i] = 0;
 		for (int i = 0; i <= poly2->red; i++)
 			this->polinom[i] = poly1->polinom[i] + poly2->polinom[i];
 		for (int i = poly2->red + 1; i <= poly1->red; i++)
@@ -64,13 +68,15 @@ void CPolynom::Add(CPolynom* poly1, CPolynom* poly2)
 	else
 	{
 		this->red = poly2->red;
-		this->polinom = new double(poly2->red + 1);
+		this->polinom = new double[poly2->red + 1];
+		for (int i = 0; i <= poly2->red; i++)
+			this->polinom[i] = 0;
 		for (int i = 0; i <= poly1->red; i++)
 			this->polinom[i] = poly1->polinom[i] + poly2->polinom[i];
 	}
 }
 
-CPolynom* CPolynom::Mul(CPolynom* poly1, CPolynom* poly2)
+CPolynom* CPolynom::Mul(CPolynom* poly1, CPolynom* poly2) //moze isto preko void i this
 {
 	CPolynom* temp = new CPolynom(poly1->red + poly2->red);
 	for (int i = 0; i <= poly1->red; i++)
@@ -78,7 +84,7 @@ CPolynom* CPolynom::Mul(CPolynom* poly1, CPolynom* poly2)
 		{	
 			if (poly1->polinom[i] == 0)
 				temp->polinom[i + j] = poly2->polinom[j];
-			else if (poly2->polinom[j])
+			else if (poly2->polinom[j] == 0)
 				temp->polinom[i + j] = poly1->polinom[i];
 			else
 				temp->polinom[i + j] += poly1->polinom[i] * poly2->polinom[j]; //mnozenje svaki sa svaki i sabiranje istih stepena
@@ -89,6 +95,6 @@ CPolynom* CPolynom::Mul(CPolynom* poly1, CPolynom* poly2)
 void CPolynom::print()
 {
 	for (int i = 0; i < this->red; i++)
-		cout << this->polinom[i] << "*x^" << i << " + ";
-	cout << this->polinom[this->red] << "*x^" << this->red << endl;
+		cout << polinom[i] << "*x^" << i << " + ";
+	cout << polinom[this->red] << "*x^" << this->red << endl;
 }
