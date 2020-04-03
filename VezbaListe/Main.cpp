@@ -20,5 +20,7 @@ int main()
 
 	dll->printAll();
 
+	delete dll;
+	
 	return 0;
 }
