@@ -22,4 +22,9 @@ public:
 	void deleteElement(int element);
 	bool isInList(int element);
 	void removeDuplicates();
+	Node* findNodePtr(int element);
+	Node* getHead() { return head; }; //i da je lista prazna vratice nullptr
+	Node* getNext(Node* ptr);
+	int getHeadElement();
+	int getNextElement(int element);
 };
