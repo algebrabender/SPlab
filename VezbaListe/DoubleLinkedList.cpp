@@ -128,34 +128,115 @@ bool DoubleLinkedList::isInList(int element)
 				temp = temp->next;
 			if (temp != nullptr) //izaslo je iz while jer je naslo element
 				return true;
-			else 
+			else
 				return false;
+		}
+	}
+	else
+		return false;
+}
+
+void DoubleLinkedList::removeDuplicates() //mozda treba optimizovati
+{
+	if (!isEmpty())
+	{
+		Node* temp;
+		Node* temp2; //temp i temp2 da bi bila "for" petlja kao kod polja
+		Node* temp3; //temp3 za delete
+		temp = head;
+		while (temp != nullptr && temp->next != nullptr) //prva "for" petlja
+		{
+			temp2 = temp; //za drugu "for" petlju
+			while (temp2->next != nullptr) //druga "for" petlja
+			{
+				if (temp2->next->isEqual(temp->info)) //ako je duplikat
+				{
+					temp3 = temp2->next; //temp2->next je za brisanje
+					temp2->next = temp2->next->next;
+					delete temp3; //brisanje duplikata
+				}
+				else //ako nije preci na sledeci element
+					temp2 = temp2->next;
+			}
+			temp = temp->next; //pomeranje na sledeci element
 		}
 	}
 	else
 		throw exception("Lista je prazna");
 }
 
-void DoubleLinkedList::removeDuplicates() //mozda treba optimizovati
+Node* DoubleLinkedList::findNodePtr(int element)
 {
-	Node* temp;
-	Node* temp2; //temp i temp2 da bi bila "for" petlja kao kod polja
-	Node* temp3; //temp3 za delete
-	temp = head;
-	while (temp != nullptr && temp->next != nullptr) //prva "for" petlja
+	if (isInList(element)) //postoji cvor sa elementom
 	{
-		temp2 = temp; //za drugu "for" petlju
-		while (temp2->next != nullptr) //druga "for" petlja
+		if (head == tail)
 		{
-			if (temp2->next->isEqual(temp->info)) //ako je duplikat
-			{
-				temp3 = temp2->next; //temp2->next je za brisanje
-				temp2->next = temp2->next->next;
-				delete temp3; //brisanje duplikata
-			}
-			else //ako nije preci na sledeci element
-				temp2 = temp2->next;
+			if (head->info == element)
+				return head;
+			else
+				return nullptr;
 		}
-		temp = temp->next; //pomeranje na sledeci element
+		Node* temp = head->next;
+		while (temp != nullptr && !temp->isEqual(element))
+			temp = temp->next;
+		if (temp != nullptr) //cvor sa elementom nadjen
+			return temp;
+		else
+			return nullptr;
 	}
+	else //nema cvor sa elementom ili je prazna lista
+		return nullptr;
+}
+
+Node* DoubleLinkedList::getNext(Node* ptr)
+{
+	if (!isEmpty())
+	{
+		if (head == tail)
+			return nullptr; //i da je ptr head svakako nema sledeceg cvora
+		else
+		{
+			Node* temp = head->next;
+			while (temp != nullptr && temp != ptr)
+				temp = temp->next;
+			if (temp != nullptr) //doslo je do poklanja cvorova
+				return temp->next;
+		}
+	}
+	else //prazna lista
+		return nullptr;
+}
+
+int DoubleLinkedList::getHeadElement()
+{
+	if (!isEmpty())
+		return head->info;
+	else
+		throw exception("Lista je prazna");
+}
+
+int DoubleLinkedList::getNextElement(int element)
+{
+	if (!isEmpty())
+	{
+		if (head == tail)
+			return -1; //nema sledeceg cvora 
+		else
+		{
+			Node* temp = head->next;
+			while (temp != nullptr && !temp->isEqual(element))
+				temp = temp->next;
+			if (temp != nullptr)
+			{
+				if (temp->next != nullptr) //ako nije sl cvor nullptr
+					return temp->next->info;
+				else
+					return -1;
+			}
+			else
+				return -1; //nema cvora koji ima vrednost element
+		}
+	}
+	else
+		throw exception("Lista je prazna");
 }
