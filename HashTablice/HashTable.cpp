@@ -11,9 +11,7 @@ unsigned int HashTable::h2(HashObject* object)
 	unsigned int p = getPower(this->length);
 	if (p != -1)
 		return squaredKey >> (32 - p);
-	else
-		return -1;
-		//throw std::exception ("Nemoguce koristiti ovu funkciju")
+	throw std::exception ("Nemoguce koristiti ovu funkciju")
 }
 
 unsigned int HashTable::h3(HashObject* object)
@@ -23,8 +21,7 @@ unsigned int HashTable::h3(HashObject* object)
 	unsigned int p = getPower(this->length);
 	if (p != -1)
 		return ak >> (32 - p);
-	else
-		return -1;
+	throw std::exception("Nemoguce koristiti ovu funkciju")
 }
 
 unsigned int HashTable::f(int iKey)
@@ -52,26 +49,6 @@ unsigned int HashTable::f(char* sKey)
 	for (int i = 0; sKey[i] != 0; ++i)
 		key = key >> a ^ sKey[i];
 	return key;
-}
-
-unsigned int HashTable::c1(unsigned int i, unsigned int alfa)
-{
-	return i * alfa;
-}
-
-unsigned int HashTable::c2(unsigned int i, unsigned int alfa)
-{
-	return i*i * alfa;
-}
-
-unsigned int HashTable::c3(unsigned int i, HashObject* object)
-{
-	return i * hPrim(object);
-}
-
-unsigned int HashTable::hPrim(HashObject* object)
-{
-
 }
 
 double HashTable::getLoadFactor()
