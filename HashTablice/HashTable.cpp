@@ -11,7 +11,7 @@ unsigned int HashTable::h2(HashObject* object)
 	unsigned int p = getPower(this->length);
 	if (p != -1)
 		return squaredKey >> (32 - p);
-	throw std::exception ("Nemoguce koristiti ovu funkciju")
+	throw std::exception("Nemoguce koristiti ovu funkciju");
 }
 
 unsigned int HashTable::h3(HashObject* object)
@@ -21,7 +21,7 @@ unsigned int HashTable::h3(HashObject* object)
 	unsigned int p = getPower(this->length);
 	if (p != -1)
 		return ak >> (32 - p);
-	throw std::exception("Nemoguce koristiti ovu funkciju")
+	throw std::exception("Nemoguce koristiti ovu funkciju");
 }
 
 unsigned int HashTable::f(int iKey)
