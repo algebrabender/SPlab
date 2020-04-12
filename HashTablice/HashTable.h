@@ -13,12 +13,6 @@ protected:
 	unsigned int f(int iKey); //int->unsigned
 	unsigned int f(double dKey); //double->unsigned
 	unsigned int f(char* sKey); //string->unsigned
-	///ovo ce vrv da ide u klasu za otvoreno adresiranje
-	unsigned int c1(unsigned int i, unsigned int alfa); //linearno trazenje
-	unsigned int c2(unsigned int i, unsigned int alfa); //kvadratno trazenje
-	unsigned int c3(unsigned int i, HashObject* object); //trasf sa sek. hash funkcijom
-	unsigned int hPrim(HashObject* object); //sek. hash funkcija
-	///
 public:
 	unsigned int getLength() { return this->length; };
 	double getLoadFactor();
