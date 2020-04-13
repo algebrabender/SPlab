@@ -41,12 +41,12 @@ unsigned int OpenScatterTable::findUnoccupied(ScatterObject* object)
 	}
 }
 
-int OpenScatterTable::findMatch(int key)
+long OpenScatterTable::findMatch(int key)
 {
 	unsigned int temp = f(key) % length;
 	for (int i = 0; i < length; i++)
 	{
-		int synonim = temp + c2(i, 5);
+		long synonim = temp + c2(i, 5);
 		if (arr[synonim]->status == 0)
 			return -1; //slobodno mesto, svaki sledece mesto za synonim je isto slobodno
 		if (arr[synonim]->isEqualKey(key))
