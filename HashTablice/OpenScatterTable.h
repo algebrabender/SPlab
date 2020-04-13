@@ -9,7 +9,7 @@ public:
 	OpenScatterTable(unsigned int length);
 	~OpenScatterTable();
 	unsigned int findUnoccupied(ScatterObject* object);
-	int findMatch(int key); //int da bi moglo da se vrati -1
+	long findMatch(int key); //long da bi moglo da se vrati -1
 	void insert(ScatterObject* object);
 	ScatterObject* find(int key);
 	void withdraw(int key);
