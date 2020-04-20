@@ -10,9 +10,9 @@ Preduzece::Preduzece(string naziv, int pib, int brRadnika, double godPrihod)
 
 void Preduzece::print()
 {
-	cout << "PIB: " << this->PIB << " Preduzece: " << this->naziv
-		<<  "Broj radnika: " << this->brRadnika
-		<< " Godisnji prihod: " << this->godPrihod << endl;
+	cout << "PIB: " << this->PIB << " | Preduzece: " << this->naziv
+		<<  " | Broj radnika: " << this->brRadnika
+		<< " | Godisnji prihod: " << this->godPrihod << endl;
 }
 
 Preduzece* Preduzece::operator=(const Preduzece* object)

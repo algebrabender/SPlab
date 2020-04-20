@@ -12,4 +12,5 @@ public:
 	void insert(ChainedScatterObject* object);
 	ChainedScatterObject* find(int key);
 	void withdraw(int key);
+	void print();
 };

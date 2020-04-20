@@ -8,6 +8,11 @@ ChainedScatterTable::ChainedScatterTable(unsigned int length)
 		this->count = 0;
 		arr = new ChainedScatterObject * [length];
 		arrS = new ChainedScatterObject * [length];
+		for (unsigned int i = 0; i < length; i++)
+		{
+			arr[i] = new ChainedScatterObject();
+			arrS[i] = new ChainedScatterObject();
+		}
 	}
 	else
 		throw exception("Nevalidna duzina");
@@ -50,7 +55,10 @@ void ChainedScatterTable::insert(ChainedScatterObject* object)
 			//ako se izaslo jer je mesto slobodno
 			if (temp2 != tail) //tj nije se izaslo jer smo prosli sve
 			{
-				arrS[prev]->next = temp2; //poslednji sinonim treba da ukazuje na novi sinonim
+				if (prev == temp2)
+					arr[temp]->next = temp2; //ako prvi sinonim
+				else
+					arrS[prev]->next = temp2; //poslednji sinonim treba da ukazuje na novi sinonim
 				arrS[temp2] = object; //smestamo
 				arrS[temp2]->status = 2;
 				arrS[temp2]->next = -1;
@@ -113,7 +121,7 @@ void ChainedScatterTable::withdraw(int key) //verovatno neoptimizovano
 					arr[temp] = arrS[temp2]; //prebacivanje prvog sinonima iz prostora za sinonime
 					arr[temp]->next = arrS[temp2]->next; //prelancavanje
 					arrS[temp2] = new ChainedScatterObject(); //"popuniti mesto"
-					arrS[temp2]->next = 1; //obrisano, to mesto slobodno za sledeci insert
+					arrS[temp2]->status = 1; //obrisano, to mesto slobodno za sledeci insert
 				}
 			}
 			else if (arr[temp]->next != -1) //ako nije taj kljuc i ima sinonime, traziti po njima
@@ -154,9 +162,27 @@ void ChainedScatterTable::withdraw(int key) //verovatno neoptimizovano
 				}
 			}
 		}
-		//ako nista od unutrasnjih ifova ili prvi if
-		throw exception("Element nije nadjen");
+		else
+			throw exception("Element nije nadjen");
 	}
 	else
 		throw exception("Prazna tablica");
+}
+
+void ChainedScatterTable::print()
+{
+	cout << "ARR: " << endl;
+	for (unsigned int i = 0; i < length; i++)
+	{
+		if (arr[i]->status == 2)
+		{
+			cout << "Key: " << i << " | "; arr[i]->print();
+		}
+	}
+	cout << "ARRS: " << endl;
+	for (unsigned int i = 0; i < length; i++)
+	{
+		if (arrS[i]->status == 2)
+			arrS[i]->print();
+	}
 }
