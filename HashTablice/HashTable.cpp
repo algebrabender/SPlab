@@ -1,6 +1,6 @@
 #include "HashTable.h"
 
-unsigned int HashTable::h1(HashObject* object)
+unsigned int HashTable::h(HashObject* object)
 {
 	return (f(object->getKey()) % this->length);
 }
