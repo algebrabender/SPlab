@@ -44,8 +44,8 @@ int HashTable::getPower(unsigned int num)
 {
 	if (num % 2 == 0)
 	{
-		int count = 1;
-		while (num != 0)
+		int count = 0;
+		while (num != 1)
 		{
 			num /= 2;
 			++count;
