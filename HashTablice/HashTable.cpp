@@ -5,28 +5,12 @@ unsigned int HashTable::h1(HashObject* object)
 	return (f(object->getKey()) % this->length);
 }
 
-unsigned int HashTable::h2(HashObject* object)
+unsigned int HashTable::f(int iKey)
 {
-	unsigned int squaredKey = object->getKey() * object->getKey();
+	unsigned int squaredKey = iKey * iKey;
 	unsigned int p = getPower(this->length);
 	if (p != -1)
 		return squaredKey >> (32 - p);
-	throw std::exception("Nemoguce koristiti ovu funkciju");
-}
-
-unsigned int HashTable::h3(HashObject* object)
-{
-	unsigned const int a = 2654435769;
-	unsigned int ak = a * object->getKey();
-	unsigned int p = getPower(this->length);
-	if (p != -1)
-		return ak >> (32 - p);
-	throw std::exception("Nemoguce koristiti ovu funkciju");
-}
-
-unsigned int HashTable::f(int iKey)
-{
-	return abs(iKey);
 }
 
 unsigned int HashTable::f(double dKey)
