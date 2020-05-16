@@ -74,7 +74,7 @@ bool GraphAsLists::deleteNode(int info)
 		if (temp == nullptr) //nema tog cvora
 			return false;
 		//ako ne nadjen cvor
-		deleteEdgeToNode(temp);
+		deleteEdgeToNode(temp); //brisanje potega koji ukazuju na ovaj cvor kod drugih
 		temp2->next = temp->next; //prelancavanje
 		Edge* temp3 = temp->adj;
 		while (temp3 != nullptr) //brisanje liste potega
