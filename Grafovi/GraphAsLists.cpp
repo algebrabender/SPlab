@@ -74,16 +74,17 @@ bool GraphAsLists::deleteNode(int info)
 		if (temp == nullptr) //nema tog cvora
 			return false;
 		//ako ne nadjen cvor
+		deleteEdgeToNode(temp);
 		temp2->next = temp->next; //prelancavanje
 		Edge* temp3 = temp->adj;
-		while (temp3 != nullptr)
+		while (temp3 != nullptr) //brisanje liste potega
 		{
 			Edge* temp4 = temp3->link;
 			delete temp3;
 			temp3 = temp4;
 		}
-		deleteEdgeToNode(temp);
-		delete(temp);
+		
+		delete temp;
 		--this->numberOfNodes;
 		return true;
 	}
@@ -167,7 +168,6 @@ int GraphAsLists::depthTrav(int a)
 	int count = 0;
 	LinkedNode* temp = this->start;
 	StackAsArray* stack = new StackAsArray(this->numberOfNodes);
-	return count;
 	while (temp != nullptr)
 	{
 		temp->status = 1; //na cekanju
