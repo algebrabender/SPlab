@@ -13,15 +13,15 @@ GraphAsLists::~GraphAsLists()
 LinkedNode* GraphAsLists::findNode(int info)
 {
 	LinkedNode* temp = start;
-	while (temp!=nullptr && temp->info != info)
+	while (temp != nullptr && temp->info != info)
 		temp = temp->next; //sl u listi cvorova
 	return temp; //ili kraj(nullptr) ili nadjen odg cvor
 }
 
 Edge* GraphAsLists::findEdge(int a, int b)
 {
-	LinkedNode* nodeA = findNode(a);
-	LinkedNode* nodeB = findNode(b);
+	LinkedNode* nodeA = this->findNode(a);
+	LinkedNode* nodeB = this->findNode(b);
 	if (nodeA == nullptr || nodeB == nullptr)
 		return nullptr; //nema jednog od cvorova pa nema ni potega
 	Edge* temp = nodeA->adj; //lista potega cvora A
@@ -32,7 +32,7 @@ Edge* GraphAsLists::findEdge(int a, int b)
 
 bool GraphAsLists::insertNode(int info)
 {
-	LinkedNode* newNode = new LinkedNode(info, nullptr,this->start, 0); //novi cvor sa info, praznom listom potega i statusom 0
+	LinkedNode* newNode = new LinkedNode(info, nullptr, this->start, 0); //novi cvor sa info, praznom listom potega i statusom 0
 	//start je da bi ukazivalo na prvi cvor u listi cvorova
 	if (newNode == nullptr)
 		return false; //ako nije doslo do kreiranja cvora
@@ -74,7 +74,7 @@ bool GraphAsLists::deleteNode(int info)
 		if (temp == nullptr) //nema tog cvora
 			return false;
 		//ako ne nadjen cvor
-		deleteEdgeToNode(temp); //brisanje potega koji ukazuju na ovaj cvor kod drugih
+		deleteEdgeToNode(temp); //brisanje potega koji vode do ovog cvora drugih cvorva
 		temp2->next = temp->next; //prelancavanje
 		Edge* temp3 = temp->adj;
 		while (temp3 != nullptr) //brisanje liste potega
@@ -83,7 +83,7 @@ bool GraphAsLists::deleteNode(int info)
 			delete temp3;
 			temp3 = temp4;
 		}
-		
+
 		delete temp;
 		--this->numberOfNodes;
 		return true;
@@ -92,8 +92,8 @@ bool GraphAsLists::deleteNode(int info)
 
 bool GraphAsLists::insertEdge(int a, int b)
 {
-	LinkedNode* nodeA = findNode(a);
-	LinkedNode* nodeB = findNode(b);
+	LinkedNode* nodeA = this->findNode(a);
+	LinkedNode* nodeB = this->findNode(b);
 	if (nodeA == nullptr || nodeB == nullptr)
 		return false; //ako cvor A ili cvor B ne postoje
 	Edge* newEdge = new Edge(nodeB, nodeA->adj); //od A do B i ukazuje na prvog u listi potega
@@ -105,8 +105,8 @@ bool GraphAsLists::insertEdge(int a, int b)
 
 bool GraphAsLists::deleteEdge(int a, int b)
 {
-	LinkedNode* nodeA = findNode(a);
-	LinkedNode* nodeB = findNode(b);
+	LinkedNode* nodeA = this->findNode(a);
+	LinkedNode* nodeB = this->findNode(b);
 	Edge* temp = nodeA->adj;
 	while (temp != nullptr && temp->dest != nodeB) //provera da li u listi potega A ima potega do B
 		temp = temp->link;
@@ -120,7 +120,7 @@ bool GraphAsLists::deleteEdge(int a, int b)
 	}
 	//ako nije u temp je poteg koji treba obrisati
 	Edge* temp2 = nodeA->adj;
-	while (temp2->link != temp) //treazenje prethodnika u listi potega
+	while (temp2->link != temp) //trazenje prethodnika u listi potega
 		temp2 = temp2->link; //zbog prelancavanja
 	temp2->link = temp->link; //prelancavanje
 	delete temp;
@@ -130,14 +130,14 @@ bool GraphAsLists::deleteEdge(int a, int b)
 int GraphAsLists::breadthTrav(int a)
 {
 	int count = 0;
-	LinkedNode* temp = start;
+	LinkedNode* temp = this->start;
 	QueueAsArray* queue = new QueueAsArray(this->numberOfNodes);
 	while (temp != nullptr)
 	{
 		temp->status = 1; //na cekanju
 		temp = temp->next;
 	}
-	temp = findNode(a);
+	temp = this->findNode(a);
 	if (temp == nullptr)
 		return 0; //nema tog cvora
 	queue->enqueue(temp);
@@ -173,7 +173,7 @@ int GraphAsLists::depthTrav(int a)
 		temp->status = 1; //na cekanju
 		temp = temp->next;
 	}
-	temp = findNode(a);
+	temp = this->findNode(a);
 	if (temp == nullptr)
 		return 0; //nema tog cvora
 	stack->push(temp);
@@ -190,58 +190,12 @@ int GraphAsLists::depthTrav(int a)
 			if (temp2->dest->status == 1) //ako je na cekanju
 			{
 				stack->push(temp2->dest);
-				temp2->dest->status = 2; //u redu
+				temp2->dest->status = 2; //na stacku
 			}
 			temp2 = temp2->link;
 		}
 	}
 	delete stack;
-	return count;
-}
-
-int GraphAsLists::topologicalOrderTrav()
-{
-	int count = 0;
-	LinkedNode* temp = this->start;
-	while (temp != nullptr)
-	{
-		temp->status = 0; //da svi imaju nula
-		temp = temp->next;
-	}
-	temp = this->start;
-	while (temp != nullptr)
-	{
-		Edge* temp2 = temp->adj;
-		while (temp2 != nullptr)
-		{
-			temp2->dest->status += 1; //odredivanje tezine
-			temp2 = temp2->link;
-		}
-		temp = temp->next;
-	}
-	QueueAsArray* queue = new QueueAsArray(this->numberOfNodes);
-	temp = start;
-	while (temp !=nullptr)
-	{
-		if (temp->status == 0) //svi cvorovi u queue
-			queue->enqueue(temp);
-		temp = temp->next;
-	}
-	while (!queue->isEmpty())
-	{
-		temp = queue->dequeue();
-		temp->visit();
-		++count;
-		Edge* temp2 = temp->adj;
-		while (temp2 != nullptr)
-		{
-			temp2->dest->status -= 1; //status mu se smanjuje
-			if (temp2->dest->status == 0) //ako se smanjilo skroz do 0
-				queue->enqueue(temp2->dest); //moze u red
-			temp2 = temp2->link; 
-		}
-	}
-	delete queue;
 	return count;
 }
 
@@ -271,4 +225,98 @@ void GraphAsLists::deleteEdgeToNode(LinkedNode* node)
 			deleteEdge(temp->info, node->info); //obrisace poteg izmedju trenutnog cvora i cvora za brisanje, ako ga ima
 		temp = temp->next;
 	}
+}
+
+void GraphAsLists::povratniPoteg(int info)
+{
+	LinkedNode* temp = this->findNode(info);
+	if (temp != nullptr) //ako ima datog cvora
+	{
+		Edge* temp2 = temp->adj;
+		while (temp2 != nullptr) //prolazak liste potega
+		{
+			LinkedNode* temp3 = temp2->dest;
+			Edge* temp4 = temp3->adj;
+			if (temp4 != nullptr) //ako ima potege trenutni cvor
+			{
+				Edge* temp5 = temp4;
+				while (temp4 != nullptr && temp4->dest != temp)
+				{
+					temp5 = temp4;
+					temp4 = temp4->link;
+				}
+				if (temp4 != nullptr)
+				{
+					if (temp5 == temp4 && temp4->link == nullptr) //ako ima samo jedan poteg
+					{
+						temp3->adj = nullptr;
+						delete temp4;
+					}
+					else if (temp5 == temp4)
+					{
+						temp3->adj = temp5->link;
+						delete temp4;
+					}
+					else
+					{
+						temp5->link = temp4->link;
+						delete temp4;
+					}
+				}
+			}
+			temp2 = temp2->link;
+		}
+	}
+}
+
+int GraphAsLists::brojCvorova(int info, int duzina)
+{
+	int count = 0;
+	LinkedNode* temp = this->findNode(info);
+	QueueAsArray* queue = new QueueAsArray(this->numberOfNodes);
+	if (temp != nullptr)
+	{
+		LinkedNode* temp2 = this->start;
+		while (temp2 != nullptr)
+		{
+			temp2->status = 0; //ukoliko je bio neki obilazak pre ne bi bilo 0
+			temp2->put = 0; //ukoliko je vec bila zvana funkcija
+			temp2 = temp2->next;
+		}
+		Edge* temp3 = temp->adj;
+		while (temp3 != nullptr)
+		{
+			temp2 = temp3->dest;
+			if (temp2->status == 0)
+			{
+				queue->enqueue(temp2);
+				while (!queue->isEmpty())
+				{
+					temp2 = queue->dequeue();
+					if (temp2->status == 0)
+					{
+						temp2->status = 3; //obradjen
+						++temp2->put; //doslo se do njega vec jednom
+						++count; //broji se cvor
+						Edge* temp4 = temp2->adj;
+						if ((temp2->put + 1) < duzina) //ako bi put do sledeceg bio veci od duzine ni ne treba uzimati u obzir
+						{
+							while (temp4 != nullptr) //po listi potega trenutnog cvora u temp1
+							{
+								if (temp4->dest->status != 3) //ako nije vec obradjen
+								{
+									temp4->dest->put = temp2->put;
+									queue->enqueue(temp4->dest); //u red 
+								}
+								temp4 = temp4->link;
+							}
+						}
+					}
+				}
+			}
+			temp3 = temp3->link;
+		}
+	}
+	delete queue;
+	return count;
 }

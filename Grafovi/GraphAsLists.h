@@ -17,8 +17,9 @@ public:
 	bool deleteEdge(int a, int b);
 	int breadthTrav(int a); //obilazak po sirini
 	int depthTrav(int a); //obilazak po dubini
-	int topologicalOrderTrav(); //topoloski obilazak
 	void print();
+	void povratniPoteg(int info);
+	int brojCvorova(int info, int duzina);
 protected:
 	void deleteEdgeToNode(LinkedNode* node);
 };
